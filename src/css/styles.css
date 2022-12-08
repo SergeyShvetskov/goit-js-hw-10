@@ -27,3 +27,25 @@ body {
 .show {
   display: block;
 }
+
+.news-list {
+  list-style: none;
+  justify-content: center;
+}
+
+
+.news-list-li {
+  /* outline: solid tomato; */
+  display: flex;
+  margin-bottom: 5px;
+}
+.name-country-big{
+  padding-left: 10px;
+  font-size: 34px;
+  font-weight: 600;
+}
+.name-country{
+  padding-left: 7px;
+  font-size: 18px;
+  font-weight: 600;
+}

@@ -1,5 +1,6 @@
 import './css/styles.css';
 import Notiflix from 'notiflix';
+import debounce from 'lodash.debounce';
 
 const DEBOUNCE_DELAY = 300;
 
@@ -12,32 +13,53 @@ const refs = {
     loader: document.querySelector('.news-loader'),
 }
 
+const inputText = document.querySelector('input#search-box');
+
+inputText.addEventListener('input', debounce(handleSubmit2, DEBOUNCE_DELAY));
+function handleSubmit2(params) {
+    params.preventDefault;
+    console.log(params.target.value); 
+}
+
 let items = [];
 
-const getItemtemplate = ({name, capital, population, flags, languages}) => {
-    // let lang = languages.toString();
-    // console.log(languages.map(func1));
+const getItemtemplateMin = ({name, flags }) => {
+    let result = `<li class="news-list-li"> 
+    <img width = 30px src=${flags.svg}>
+    <span class="name-country"> ${name.official}</span>
+    </li>`;
+    return result;
+}
+
+const getItemtemplateMax = ({name, capital, population, flags, languages}) => {
+    let lang = Object.values(languages).join(", ");
+    // console.log(lang);
     let result = `<li class="news-item">
-        <p> name: ${name.official}</p>
-      <p>capital: ${capital}</p>
-      <p>population: ${population}</p>
-       <p>flags: ${flags.svg}</p>
-      <img width = 30px src=${flags.svg}>
-      <p>languages: ${languages}</p>
+       <img width = 30px src=${flags.svg} alt=${name}> 
+    <span class="name-country-big"> ${name.official}</span>
+      <p><b>Capital:</b> ${capital}</p>
+      <p><b>Population:</b> ${population}</p>
+      <p><b>Languages:</b> ${lang}</p>
         </li>
     `;
     return result;
     };
-// const func1 = (param) => {
-//     let result;
-//     result = "languages";
-//     return result;
-// }
+
 const render = () => {
-    // console.log(items);
-    const list = items.map(getItemtemplate);
-    refs.list.innerHTML = "";
-    refs.list.insertAdjacentHTML('beforeend', list.join(''));
+
+    // console.log(items.length);
+    if (items.length > 10) {
+        Notiflix.Notify.info("Too many matches found. Please enter a more specific name.");
+    } else if (items.length <= 10 && items.length >= 2) { 
+        const list = items.map(getItemtemplateMin);
+        refs.list.innerHTML = "";
+        refs.list.insertAdjacentHTML('beforeend', list.join(''));
+    } else if (items.length == 1 ){
+        const list = items.map(getItemtemplateMax);
+        refs.list.innerHTML = "";
+        refs.list.insertAdjacentHTML('beforeend', list.join(''));
+    }
+    
 };
 
 const showLoader = () => {
@@ -56,29 +78,27 @@ const unlockForm = () => {
 };
 
 const handleSubmit = e => {
-    const {value} = e.target.elements.query;
     
+    const { value } = e.target.elements.query;
     e.preventDefault();
+    // const { value } = e.target.value;
+
+    const valueTrim = value.trim();
+    console.log(valueTrim);
+    if (valueTrim) {
+
+    
+    refs.list.innerHTML = "";
     showLoader();
     lockForm();
-    // fetch('https://restcountries.com/v3.1/name/{name}');
-    // fetch(`${URL}?query=${value}`)
-    fetch(`${URL}${value}`)
+    fetch(`${URL}${valueTrim}`)
         
-        // .then(resp => resp.json())
         .then(resp => {
-            // console.log(resp);
-            // console.log(resp.json());
            return resp.json();
         })
 
         .then(data => {
             items = data;
-            console.log(items);
-
-//    for (const product of data.products) {
-//        console.log(product);
-//     }
             render();
         })
         .catch(error => {
@@ -88,9 +108,11 @@ const handleSubmit = e => {
             hideLoader();
             unlockForm();
         });
+    }
+ 
 };
 
-refs.form.addEventListener('submit', handleSubmit);
+// refs.form.addEventListener('submit', handleSubmit);
 
 
 // const inputText = document.querySelector('input#search-box');
