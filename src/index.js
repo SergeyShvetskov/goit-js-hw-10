@@ -3,28 +3,36 @@ import Notiflix from 'notiflix';
 
 const DEBOUNCE_DELAY = 300;
 
-const getItemtemplate = ({name, capital, population, flags, languages}) =>
-    `<li class="news-item">
-        <p> name: ${name.official}</p>
-      <p>capital: ${capital}</p>
-      <p>population: ${population}</p>
-      <p>flags: ${flags.svg}</p>
-      <p>languages: ${languages}</p>
-        </li>
-    `;
+const URL = 'https://restcountries.com/v3.1/name/';
 
-    const URL = 'https://restcountries.com/v3.1/name/';
-// const URL = 'https://hn.algolia.com/api/v1/search';
 const refs = {
     form: document.querySelector('.news-form'),
     list: document.querySelector('.news-list'),
     submitButton: document.querySelector('.news-submit'),
     loader: document.querySelector('.news-loader'),
-    
 }
 
 let items = [];
 
+const getItemtemplate = ({name, capital, population, flags, languages}) => {
+    // let lang = languages.toString();
+    // console.log(languages.map(func1));
+    let result = `<li class="news-item">
+        <p> name: ${name.official}</p>
+      <p>capital: ${capital}</p>
+      <p>population: ${population}</p>
+       <p>flags: ${flags.svg}</p>
+      <img width = 30px src=${flags.svg}>
+      <p>languages: ${languages}</p>
+        </li>
+    `;
+    return result;
+    };
+// const func1 = (param) => {
+//     let result;
+//     result = "languages";
+//     return result;
+// }
 const render = () => {
     // console.log(items);
     const list = items.map(getItemtemplate);
@@ -71,7 +79,6 @@ const handleSubmit = e => {
 //    for (const product of data.products) {
 //        console.log(product);
 //     }
-
             render();
         })
         .catch(error => {
