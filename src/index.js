@@ -8,7 +8,6 @@ const DEBOUNCE_DELAY = 300;
 const URL = 'https://restcountries.com/v3.1/name/';
 
 const refs = {
-    // form: document.querySelector('.news-form'),
     list: document.querySelector('.news-list'),
     submitButton: document.querySelector('.news-submit'),
     loader: document.querySelector('.news-loader'),
