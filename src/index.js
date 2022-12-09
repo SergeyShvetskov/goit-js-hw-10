@@ -1,6 +1,7 @@
 import './css/styles.css';
 import Notiflix from 'notiflix';
 import debounce from 'lodash.debounce';
+import { fetchCountries } from './fetchCountries.js';
 
 const DEBOUNCE_DELAY = 300;
 
@@ -23,25 +24,8 @@ function onInput(params) {
     let valueTrim = value.trim();
     if (valueTrim) {
     refs.list.innerHTML = "";
-    showLoader();
-    // lockForm();
-    fetch(`${URL}${valueTrim}`)
-        
-        .then(resp => {
-           return resp.json();
-        })
-
-        .then(data => {
-            items = data;
-            render();
-        })
-        .catch(error => {
-            console.log(error);
-        })
-        .finally(() => {
-            hideLoader();
-            // unlockForm();
-        });
+        showLoader();
+        fetchCountries(valueTrim);
     }
 }
 
@@ -57,7 +41,6 @@ const getItemtemplateMin = ({name, flags }) => {
 
 const getItemtemplateMax = ({name, capital, population, flags, languages}) => {
     let lang = Object.values(languages).join(", ");
-    // console.log(lang);
     let result = `<li class="news-item">
        <img width = 30px src=${flags.svg} alt=${name}> 
     <span class="name-country-big"> ${name.official}</span>
@@ -87,14 +70,6 @@ const showLoader = () => {
     refs.loader.classList.add('show');
 };
 
-const hideLoader = () => {
-    refs.loader.classList.remove('show');
-};
 
-// const lockForm = () => {
-//     refs.submitButton.setAttribute('disabled', true);
-// };
-// const unlockForm = () => {
-//     refs.submitButton.removeAttribute('disabled');
-// };
+
 
