@@ -15,6 +15,7 @@ const refs = {
     inputText: document.querySelector('input#search-box'),
 }
 
+let items = [];
 
 refs.inputText.addEventListener('input', debounce(onInput, DEBOUNCE_DELAY));
 
@@ -25,11 +26,30 @@ function onInput(params) {
     if (valueTrim) {
     refs.list.innerHTML = "";
         showLoader();
-        fetchCountries(valueTrim);
+        // fetchCountries(valueTrim);
+
+         fetch(`${URL}${valueTrim}?fields=name,capital,population,flags,languages`)
+        .then(resp => {
+            if (!resp.ok) {
+      throw Error();
+            } 
+           return resp.json();
+        })
+        .then(data => {
+            items = data;
+            console.log(items);
+            render();
+        })
+        .catch(error => {
+            Notiflix.Notify.failure("Oops, there is no country with that name");
+        })
+        .finally(() => {
+            hideLoader();
+        });
     }
 }
 
-let items = [];
+
 
 const getItemtemplateMin = ({name, flags }) => {
     let result = `<li class="news-list-li"> 
@@ -71,5 +91,7 @@ const showLoader = () => {
 };
 
 
-
+const hideLoader = () => {
+    refs.loader.classList.remove('show');
+};
 
