@@ -1,11 +1,11 @@
 import './css/styles.css';
 import Notiflix from 'notiflix';
 import debounce from 'lodash.debounce';
-import { fetchCountries } from './fetchCountries.js';
+import fetchCountries from './fetchCountries.js';
 
 const DEBOUNCE_DELAY = 300;
 
-const URL = 'https://restcountries.com/v3.1/name/';
+// const URL = 'https://restcountries.com/v3.1/name/';
 
 const refs = {
   list: document.querySelector('.news-list'),
@@ -25,9 +25,8 @@ function onInput(params) {
   if (valueTrim) {
     refs.list.innerHTML = '';
     showLoader();
-    // fetchCountries(valueTrim);
-
-    fetch(`${URL}${valueTrim}?fields=name,capital,population,flags,languages`)
+    fetchCountries(valueTrim)
+      // fetch(`${URL}${valueTrim}?fields=name,capital,population,flags,languages`)
       .then(resp => {
         if (!resp.ok) {
           throw Error();
