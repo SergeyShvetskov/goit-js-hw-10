@@ -32,7 +32,7 @@ function onInput(params) {
       })
       .then(data => {
         items = data;
-        console.log(items);
+        // console.log(items);
         render();
       })
       .catch(error => {
