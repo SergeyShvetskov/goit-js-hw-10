@@ -5,8 +5,6 @@ import fetchCountries from './fetchCountries.js';
 
 const DEBOUNCE_DELAY = 300;
 
-// const URL = 'https://restcountries.com/v3.1/name/';
-
 const refs = {
   list: document.querySelector('.news-list'),
   submitButton: document.querySelector('.news-submit'),
@@ -26,7 +24,6 @@ function onInput(params) {
     refs.list.innerHTML = '';
     showLoader();
     fetchCountries(valueTrim)
-      // fetch(`${URL}${valueTrim}?fields=name,capital,population,flags,languages`)
       .then(resp => {
         if (!resp.ok) {
           throw Error();
